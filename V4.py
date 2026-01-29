@@ -57,8 +57,8 @@ class CameraWindow(QMainWindow):
         # 디버깅: 화면 중앙 근처로 위치 변경
         screen = QApplication.primaryScreen().geometry()
         width, height = 115, 145
-        self.setGeometry(screen.widthx) - width - 5, screen.height() - height - 45, width, height)
-        # self.setGeometry(100, 100, width, height)  # 디버깅용: 좌상단 근처
+        # self.setGeometry(screen.width) - width - 5, screen.height() - height - 45, width, height)
+        self.setGeometry(100, 100, width, height)  # 디버깅용: 좌상단 근처
         print(f"📐 화면 크기: {screen.width()}x{screen.height()}")
         print(f"📍 창 설정 위치: (100, 100, {width}, {height})")
 
