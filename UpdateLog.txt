@@ -1,0 +1,4 @@
+V1: Notification, Claude API, Tavily API, Trigger Text (1/24/2026 ~ 1/25/2026 & 6h)
+V2: Screenmode, able to analyze image from capture (1/26/2026 ~ 1/27/2026 & 20m)
+V3: Cameramode, able to analyze the camera input, fixed internet data approach error (1/28/2026 ~ 1/28/2026 & 2h)
+V4: TTS Elevenlabs (1/28/2026 ~ 1/28/2026 & 2h)

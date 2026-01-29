@@ -1,0 +1,12 @@
+# 가상환경 및 캐시
+venv/
+__pycache__/
+*.pyc
+
+# 민감 정보 (절대 올리면 안 됨!)
+.env
+credentials.json
+token.json
+
+# 기타 설정
+.vscode/
