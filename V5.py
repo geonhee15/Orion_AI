@@ -139,8 +139,12 @@ class GestureController:
 class DebugWindow(QMainWindow):
     def __init__(self, signals):
         super().__init__()
-        # CameraWindow와 동일한 방식
-        self.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint | Qt.WindowType.Tool)
+        # 클릭 투과 핵심: WindowTransparentForInput
+        self.setWindowFlags(
+            Qt.WindowType.FramelessWindowHint |
+            Qt.WindowType.WindowStaysOnTopHint |
+            Qt.WindowType.WindowTransparentForInput
+        )
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         
         # 소형 사이즈
@@ -157,32 +161,6 @@ class DebugWindow(QMainWindow):
         self.label.move(5, 5)
         self.setCentralWidget(self.container)
         signals.update_debug_frame.connect(self.set_image)
-        
-        # 항상 최상단 유지 타이머
-        self.stay_on_top_timer = QTimer()
-        self.stay_on_top_timer.timeout.connect(self._force_on_top)
-        self.stay_on_top_timer.start(500)
-
-    def showEvent(self, event):
-        super().showEvent(event)
-        # macOS 클릭 투과 설정
-        self._set_click_through()
-    
-    def _set_click_through(self):
-        try:
-            from AppKit import NSApp
-            from Cocoa import NSApplication
-            import objc
-            ns_view = int(self.winId())
-            ns_window = NSApp.windowWithWindowNumber_(ns_view)
-            if ns_window:
-                ns_window.setIgnoresMouseEvents_(True)
-        except:
-            pass
-
-    def _force_on_top(self):
-        if self.isVisible():
-            self.raise_()
 
     def set_image(self, cv_img):
         rgb = cv2.cvtColor(cv_img, cv2.COLOR_BGR2RGB)
