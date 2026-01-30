@@ -135,22 +135,33 @@ class GestureController:
             else: pyautogui.scroll(-12)
             self.last_time = now
 
-# --- [PyQt 기반 디버그 윈도우] ---
+# --- [PyQt 기반 디버그 윈도우 (소형, 우하단)] ---
 class DebugWindow(QMainWindow):
     def __init__(self, signals):
         super().__init__()
-        self.setWindowTitle("Orion Gesture Debug")
-        self.setWindowFlags(Qt.WindowType.WindowStaysOnTopHint)
-        self.label = QLabel(self)
-        self.label.setFixedSize(480, 320)
-        self.setCentralWidget(self.label)
+        self.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint | Qt.WindowType.Tool)
+        self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
+        
+        # 소형 사이즈
+        width, height = 120, 90
+        screen = QApplication.primaryScreen().geometry()
+        self.setGeometry(screen.width() - width - 10, screen.height() - height - 50, width, height)
+        
+        self.container = QFrame(self)
+        self.container.setStyleSheet("background-color: rgba(0, 0, 0, 150); border-radius: 8px;")
+        self.container.setFixedSize(width, height)
+        
+        self.label = QLabel(self.container)
+        self.label.setFixedSize(width - 10, height - 10)
+        self.label.move(5, 5)
+        self.setCentralWidget(self.container)
         signals.update_debug_frame.connect(self.set_image)
 
     def set_image(self, cv_img):
         rgb = cv2.cvtColor(cv_img, cv2.COLOR_BGR2RGB)
         h, w, ch = rgb.shape
         img = QImage(rgb.data, w, h, ch*w, QImage.Format.Format_RGB888)
-        self.label.setPixmap(QPixmap.fromImage(img).scaled(480, 320, Qt.AspectRatioMode.KeepAspectRatio))
+        self.label.setPixmap(QPixmap.fromImage(img).scaled(110, 80, Qt.AspectRatioMode.KeepAspectRatio))
 
 # --- [리퀴드 글래스 스타일 카메라 위젯] ---
 class CameraWindow(QMainWindow):
@@ -564,6 +575,12 @@ if __name__ == "__main__":
     sigs.hide_debug.connect(dbg_win.hide)
     print("🔗 시그널 연결 완료")
     
+    # 제스처 항상 활성화
+    orion.gesture_ctrl.start()
+    orion.gesture_active = True
+    dbg_win.show()
+    print("👋 제스처 인식 자동 시작됨")
+    
     listener = keyboard.Listener(on_press=orion.on_press)
     listener.start()
     print("⌨️ 키보드 리스너 시작됨")
@@ -573,9 +590,10 @@ if __name__ == "__main__":
     print("=" * 50)
     print("💡 '123enter' 입력 후 엔터 → 활성화")
     print("💡 'cameramode' 입력 후 엔터 → 카메라")
-    print("💡 'gesturemode' 입력 후 엔터 → 제스처 인식")
+    print("💡 'gesturemode' 입력 후 엔터 → 제스처 토글")
     print("💡 'screenmode' 입력 후 엔터 → 스크린 캡처")
     print("💡 '123exit' 입력 후 엔터 → 종료")
+    print("👋 제스처 인식: 항상 활성화됨 (우하단 미니뷰어)")
     print("=" * 50)
     
     sys.exit(app.exec())
