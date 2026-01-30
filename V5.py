@@ -135,7 +135,7 @@ class GestureController:
             else: pyautogui.scroll(-12)
             self.last_time = now
 
-# --- [PyQt 기반 디버그 윈도우 (소형, 우하단, 항상 최상단)] ---
+# --- [PyQt 기반 디버그 윈도우 (소형, 우하단, 항상 최상단, 클릭 투과)] ---
 class DebugWindow(QMainWindow):
     def __init__(self, signals):
         super().__init__()
@@ -147,6 +147,7 @@ class DebugWindow(QMainWindow):
         )
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         self.setAttribute(Qt.WidgetAttribute.WA_ShowWithoutActivating)
+        self.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)  # 클릭 투과
         
         # 소형 사이즈
         width, height = 120, 90
@@ -156,10 +157,12 @@ class DebugWindow(QMainWindow):
         self.container = QFrame(self)
         self.container.setStyleSheet("background-color: rgba(0, 0, 0, 150); border-radius: 8px;")
         self.container.setFixedSize(width, height)
+        self.container.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)  # 컨테이너도 클릭 투과
         
         self.label = QLabel(self.container)
         self.label.setFixedSize(width - 10, height - 10)
         self.label.move(5, 5)
+        self.label.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)  # 라벨도 클릭 투과
         self.setCentralWidget(self.container)
         signals.update_debug_frame.connect(self.set_image)
         
@@ -273,7 +276,7 @@ class CameraWindow(QMainWindow):
         print("🔴 CameraWindow.close_cam() 호출됨")
         self.hide()
 
-# --- [메인 봇 클래스: 오리온 V4] ---
+# --- [메인 봇 클래스: 오리온 V5] ---
 class OrionBot:
     def __init__(self, signal_manager, shared_camera):
         self.is_active = False
@@ -513,8 +516,8 @@ class OrionBot:
                     if cmd.endswith(START_TRIGGER):
                         self.is_active = True
                         print("🟢 오리온 활성화됨")
-                        self.notify("오리온 V4 연결 완료!")
-                        self.speak_with_elevenlabs("오리온 V4 연결 완료!")
+                        self.notify("오리온 V5 연결 완료!")
+                        self.speak_with_elevenlabs("오리온 V5 연결 완료!")
                 elif self.is_active:
                     if cmd.endswith(EXIT_TRIGGER):
                         self.is_active = False
@@ -600,7 +603,7 @@ if __name__ == "__main__":
     listener.start()
     print("⌨️ 키보드 리스너 시작됨")
     
-    print(f"--- [{AI_NAME}] V4 + Gesture 통합 버전 가동 중 ---")
+    print(f"--- [{AI_NAME}] V5 + Gesture 통합 버전 가동 중 ---")
     print(f"[TTS] ElevenLabs Voice ID: {ELEVENLABS_VOICE_ID}")
     print("=" * 50)
     print("💡 '123enter' 입력 후 엔터 → 활성화")
