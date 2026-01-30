@@ -139,15 +139,9 @@ class GestureController:
 class DebugWindow(QMainWindow):
     def __init__(self, signals):
         super().__init__()
-        self.setWindowFlags(
-            Qt.WindowType.FramelessWindowHint | 
-            Qt.WindowType.WindowStaysOnTopHint | 
-            Qt.WindowType.Tool |
-            Qt.WindowType.WindowDoesNotAcceptFocus
-        )
+        # CameraWindow와 동일한 방식
+        self.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint | Qt.WindowType.Tool)
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
-        self.setAttribute(Qt.WidgetAttribute.WA_ShowWithoutActivating)
-        self.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)  # 클릭 투과
         
         # 소형 사이즈
         width, height = 120, 90
@@ -157,12 +151,10 @@ class DebugWindow(QMainWindow):
         self.container = QFrame(self)
         self.container.setStyleSheet("background-color: rgba(0, 0, 0, 150); border-radius: 8px;")
         self.container.setFixedSize(width, height)
-        self.container.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)  # 컨테이너도 클릭 투과
         
         self.label = QLabel(self.container)
         self.label.setFixedSize(width - 10, height - 10)
         self.label.move(5, 5)
-        self.label.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)  # 라벨도 클릭 투과
         self.setCentralWidget(self.container)
         signals.update_debug_frame.connect(self.set_image)
         
@@ -170,6 +162,23 @@ class DebugWindow(QMainWindow):
         self.stay_on_top_timer = QTimer()
         self.stay_on_top_timer.timeout.connect(self._force_on_top)
         self.stay_on_top_timer.start(500)
+
+    def showEvent(self, event):
+        super().showEvent(event)
+        # macOS 클릭 투과 설정
+        self._set_click_through()
+    
+    def _set_click_through(self):
+        try:
+            from AppKit import NSApp
+            from Cocoa import NSApplication
+            import objc
+            ns_view = int(self.winId())
+            ns_window = NSApp.windowWithWindowNumber_(ns_view)
+            if ns_window:
+                ns_window.setIgnoresMouseEvents_(True)
+        except:
+            pass
 
     def _force_on_top(self):
         if self.isVisible():
