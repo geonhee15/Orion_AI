@@ -1,0 +1,29 @@
+# Orion V6.1 Windows 11 - Requirements
+# 설치: pip install -r requirements.txt
+
+# === 필수 패키지 ===
+anthropic>=0.18.0
+tavily-python>=0.3.0
+google-genai>=0.3.0
+python-dotenv>=1.0.0
+requests>=2.31.0
+
+# === GUI & 멀티미디어 ===
+PyQt6>=6.6.0
+pygame>=2.5.0
+opencv-python>=4.9.0
+mediapipe>=0.10.9
+Pillow>=10.2.0
+pyautogui>=0.9.54
+
+# === Windows 전용 ===
+winotify>=1.1.0
+pywin32>=306
+playsound>=1.3.0
+
+# === 키보드 & 한글 처리 ===
+pynput>=1.7.6
+jamo>=0.4.1
+
+# === 선택 사항 (TTS 재생 대안) ===
+# pydub>=0.25.1  # 오디오 변환용 (ffmpeg 필요)
