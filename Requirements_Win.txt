@@ -1,5 +1,5 @@
 # Orion V6.1 Windows 11 - Requirements
-# 설치: pip install -r requirements.txt
+# 설치: pip install -r Requirements_Win.txt
 
 # === 필수 패키지 ===
 anthropic>=0.18.0
