@@ -37,14 +37,13 @@ CAMERA_TRIGGER = "cameramode"
 GESTURE_TRIGGER = "gesturemode"
 PLAYSONG_TRIGGER = "playsong"
 STOPSONG_TRIGGER = "stopsong"
+IGNORE_TRIGGER = "ignore"
+IGNOREX_TRIGGER = "ignorex"
 AI_NAME = "Orion"
 PROFILE_FILE = "user_profile.txt"
 TEMP_IMAGE = "temp_capture.png"
 CLAUDE_MODEL = "claude-sonnet-4-5-20250929"
 MUSIC_FOLDER = "Music"
-# 상수 추가 (기존 트리거들 아래에)
-IGNORE_TRIGGER = "ignore"
-IGNOREX_TRIGGER = "ignorex"
 
 # ElevenLabs 설정
 ELEVENLABS_VOICE_ID = "QYrOVogqhHWUzdZFXf0E"
@@ -343,8 +342,8 @@ class CameraWindow(QMainWindow):
 class OrionBot:
     def __init__(self, signal_manager, shared_camera):
         self.is_active = False
-        self.ignore_mode = False
         self.screen_mode_waiting = False 
+        self.ignore_mode = False  # V6.1: ignore 모드 플래그
         self.full_input = ""
         self.short_term_memory = []
         self.signals = signal_manager
@@ -353,7 +352,6 @@ class OrionBot:
         self.gesture_active = False
         self.music_player = MusicPlayer()  # 음악 플레이어 추가
         self.load_personal_profile()
-        
 
     def load_personal_profile(self):
         extra_info = ""
@@ -591,23 +589,34 @@ class OrionBot:
                         print("🟢 오리온 활성화됨")
                         self.notify("오리온 V6.1 연결 완료!")
                         self.speak_with_elevenlabs("오리온 V6.1 연결 완료!")
-                # on_press 메서드 수정 - elif self.is_active: 부분을 이렇게 바꿔
                 elif self.is_active:
-                    # 🔇 ignore 모드일 때는 ignorex만 처리
+                    # 🔇 V6.1: ignore 모드일 때는 ignorex만 처리
                     if self.ignore_mode:
                         if cmd_lower == IGNOREX_TRIGGER:
                             self.ignore_mode = False
+                            print("🔊 Ignore 모드 해제됨")
                             self.notify("채팅 감지 재개!")
                             self.speak_with_elevenlabs("다시 들을게!")
                         # ignore 모드에서는 다른 모든 입력 무시
                         self.full_input = ""
                         return
                     
-                    # 🔇 ignore 모드 진입
+                    # 🔇 V6.1: ignore 모드 진입
                     if cmd_lower == IGNORE_TRIGGER:
                         self.ignore_mode = True
+                        print("🔇 Ignore 모드 진입")
                         self.notify("채팅 감지 일시정지! (ignorex로 해제)")
                         self.speak_with_elevenlabs("잠깐 쉴게!")
+                    
+                    elif cmd.endswith(EXIT_TRIGGER):
+                        self.is_active = False
+                        self.ignore_mode = False  # ignore 모드도 해제
+                        self.gesture_ctrl.stop()
+                        self.music_player.stop()  # 음악도 중지
+                        self.signals.hide_debug.emit()
+                        self.signals.close_camera.emit()
+                        self.notify("퇴근한다! 이따 봐!")
+                        self.speak_with_elevenlabs("퇴근한다! 이따 봐!")
                     
                     # 🎵 음악 재생 명령
                     elif cmd_lower.startswith(PLAYSONG_TRIGGER):
@@ -717,7 +726,7 @@ if __name__ == "__main__":
     listener.start()
     print("⌨️ 키보드 리스너 시작됨")
     
-    print(f"--- [{AI_NAME}] V6.1 + Gesture + Music 통합 버전 가동 중 ---")
+    print(f"--- [{AI_NAME}] V6.1 + Gesture + Music + Ignore 통합 버전 가동 중 ---")
     print(f"[TTS] ElevenLabs Voice ID: {ELEVENLABS_VOICE_ID}")
     print("=" * 50)
     print("💡 '123enter' 입력 후 엔터 → 활성화")
@@ -726,6 +735,8 @@ if __name__ == "__main__":
     print("💡 'screenmode' 입력 후 엔터 → 스크린 캡처")
     print("🎵 'playsong [노래이름]' 입력 후 엔터 → 음악 무한 재생")
     print("🛑 'stopsong' 입력 후 엔터 → 음악 중지")
+    print("🔇 'ignore' 입력 후 엔터 → 채팅 감지 일시정지 (음악은 계속)")
+    print("🔊 'ignorex' 입력 후 엔터 → 채팅 감지 재개")
     print("💡 '123exit' 입력 후 엔터 → 종료")
     print("👋 제스처 인식: 항상 활성화됨 (우하단 미니뷰어)")
     print(f"📁 음악 폴더: ./{MUSIC_FOLDER}/ (여기에 mp3 파일 넣기)")
