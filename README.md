@@ -1,6 +1,6 @@
 # 🌌 ORION_AI Project
 
-ORION_AI is a Python-based AI project that tracks the incremental development and evolution of features through sequential versions (V1–V6.1).
+ORION_AI is a Python-based AI project that tracks the incremental development and evolution of features through sequential versions (V1–C2_Portable).
 
 ## 📂 Project Structure
 
@@ -12,7 +12,10 @@ ORION_AI/
 ├── V4.py             # TTS Elevenlabs
 ├── V5.py             # Gesture Control
 ├── V6.py             # Song Player
-├── V6.1.py           # Latest Update (Advanced features)
+├── V6.1.py           # Ignore Command
+├── C1.py             # Identity Change
+├── C2.py             # Voice Recognization
+├── C2_Portable.py    # Latest Update (Advanced features)
 ├── UpdateLog.txt     # History of changes and updates
 ├── user_profile.txt  # User-specific configuration profiles
 └── .env              # Environment variables (Excluded from GitHub for security)
