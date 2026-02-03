@@ -1,0 +1,42 @@
+{
+  "addresses": {
+    "송도집": {
+      "address": "인천광역시 연수구 송도동",
+      "stores": {
+        "롯데리아": {
+          "url": "https://www.lotteeatz.com/hsv/products/10/12408?lng=126.63986311482&lat=37.3974255837096",
+          "store_name": "롯데리아 센트럴파크점"
+        }
+      }
+    },
+    "서울집": {
+      "address": "서울특별시",
+      "stores": {}
+    }
+  },
+  "menu_aliases": {
+    "한우불고기버거": [
+      "불고기",
+      "한우불고기",
+      "bulgogi",
+      "korean beef",
+      "korean beef bulgogi",
+      "beef bulgogi"
+    ],
+    "치킨버거": [
+      "치킨",
+      "chicken",
+      "chicken burger"
+    ],
+    "새우버거": [
+      "새우",
+      "shrimp",
+      "shrimp burger"
+    ],
+    "치즈스틱": [
+      "치즈스틱",
+      "cheese stick",
+      "mozzarella"
+    ]
+  }
+}
