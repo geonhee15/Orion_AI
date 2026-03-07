@@ -1,0 +1,17 @@
+{
+  "session_id": "dev_1771424136",
+  "timestamp": 1771424136.4341152,
+  "task_title": "Fix unclosed resource and missing exception handling in audio_loop",
+  "task_type": "bug_fix",
+  "summary": "Fixed two issues in audio_loop: 1) The KeyboardInterrupt handler now sets self.is_running = False before breaking, ensuring the shutdown path in run() triggers process_command('goodbye') cleanly. 2) The generic Exception handler now calls traceback.print_exc() for full stack trace diagnostics. Added 'import traceback' at the top of main.py to support this.",
+  "demo_script": "Sir, I've fixed the audio loop shutdown handling. Now when you press Ctrl+C, the system properly sets is_running to False for a clean shutdown sequence. I've also added full traceback logging to the generic exception handler so any errors will be much easier to diagnose.",
+  "status": "staged",
+  "changes": [
+    {
+      "file_path": "O1/main.py",
+      "action": "modify",
+      "staged_filename": "O1__main.py",
+      "description": "Added 'import traceback' at top. In audio_loop KeyboardInterrupt handler, set self.is_running = False before break for clean shutdown. In generic Exception handler, added traceback.print_exc() for better diagnostics."
+    }
+  ]
+}

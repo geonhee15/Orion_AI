@@ -1,0 +1,48 @@
+[
+  {
+    "session_id": "dev_1771418650",
+    "timestamp": 1771418650.9189818,
+    "task_title": "Fix music play command extraction bug",
+    "task_type": "bug_fix",
+    "summary": "Fixed the music play command extraction bug in process_command(). The original code had two separate keyword lists (one in the `any()` guard check and another in the inner `for` loop) that could mismatch, and the inner loop never broke after finding a match. The fix consolidates detection and extraction into a single helper method `_extract_music_query()` that iterates keywords longest-first, returns the song name on the first match, and eliminates the dual-list inconsistency entirely.",
+    "status": "staged",
+    "files_changed": [
+      "O1/main.py"
+    ]
+  },
+  {
+    "session_id": "dev_1771419776",
+    "timestamp": 1771419776.662229,
+    "task_title": "Add automatic schedule summary and reminder system",
+    "task_type": "new_feature",
+    "summary": "Implemented automatic schedule summary and reminder system. Created O1/core/scheduler.py with ScheduleReminder class that provides morning daily briefings at 08:00 (configurable) using Claude summarization, and per-event reminders every 5 minutes for events within the next 15 minutes. Added get_events_as_list() method to MacCalendar that returns structured event data with datetime objects for programmatic time comparison. Integrated the scheduler into main.py with proper lifecycle management (daemon threads, start/stop), and added voice command detection for on-demand schedule summaries via keywords like '일정 요약', '오늘 일정', 'schedule summary', and 'daily briefing'.",
+    "status": "rolled_back",
+    "files_changed": [
+      "O1/core/calendar_manager.py",
+      "O1/core/scheduler.py",
+      "O1/main.py"
+    ]
+  },
+  {
+    "session_id": "dev_1771420016",
+    "timestamp": 1771420016.326472,
+    "task_title": "Fix music play command matching extracting wrong substring",
+    "task_type": "bug_fix",
+    "summary": "Fixed a bug in process_command where the music play keyword loop would continue iterating after finding a match, potentially causing the song name to be overwritten or missed. The fix restructures the loop to break on the first matching keyword and moves the play/error handling outside the keyword loop.",
+    "status": "staged",
+    "files_changed": [
+      "O1/main.py"
+    ]
+  },
+  {
+    "session_id": "dev_1771424136",
+    "timestamp": 1771424136.43484,
+    "task_title": "Fix unclosed resource and missing exception handling in audio_loop",
+    "task_type": "bug_fix",
+    "summary": "Fixed two issues in audio_loop: 1) The KeyboardInterrupt handler now sets self.is_running = False before breaking, ensuring the shutdown path in run() triggers process_command('goodbye') cleanly. 2) The generic Exception handler now calls traceback.print_exc() for full stack trace diagnostics. Added 'import traceback' at the top of main.py to support this.",
+    "status": "staged",
+    "files_changed": [
+      "O1/main.py"
+    ]
+  }
+]

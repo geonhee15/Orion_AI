@@ -1,0 +1,29 @@
+{
+  "session_id": "dev_1771419776",
+  "timestamp": 1771419776.661428,
+  "task_title": "Add automatic schedule summary and reminder system",
+  "task_type": "new_feature",
+  "summary": "Implemented automatic schedule summary and reminder system. Created O1/core/scheduler.py with ScheduleReminder class that provides morning daily briefings at 08:00 (configurable) using Claude summarization, and per-event reminders every 5 minutes for events within the next 15 minutes. Added get_events_as_list() method to MacCalendar that returns structured event data with datetime objects for programmatic time comparison. Integrated the scheduler into main.py with proper lifecycle management (daemon threads, start/stop), and added voice command detection for on-demand schedule summaries via keywords like '일정 요약', '오늘 일정', 'schedule summary', and 'daily briefing'.",
+  "demo_script": "Sir, I've implemented an automatic schedule summary and reminder system. Every morning at 8 AM, I'll give you a briefing of your day's events. I'll also check every 5 minutes for upcoming events and remind you 15 minutes before they start. You can also say 'schedule summary' or '오늘 일정' anytime for an on-demand overview of your day.",
+  "status": "rolled_back",
+  "changes": [
+    {
+      "file_path": "O1/core/calendar_manager.py",
+      "action": "modify",
+      "staged_filename": "O1__core__calendar_manager.py",
+      "description": "Added get_events_as_list() method that returns structured event data (title, start_time, end_time, location as dicts). Added _parse_time_string() and _parse_single_time() helpers to convert icalBuddy time strings to datetime objects. Enhanced _parse_events_list to catch time lines without 'at' prefix."
+    },
+    {
+      "file_path": "O1/core/scheduler.py",
+      "action": "create",
+      "staged_filename": "O1__core__scheduler.py",
+      "description": "Created new scheduler module with ScheduleReminder class. Implements morning daily briefing (default 08:00) via Claude summarization and per-event reminders every 5 minutes for events within 15 minutes. Uses threading.Timer loop with daemon threads. Tracks reminded events by (title, start_time) set to avoid duplicates."
+    },
+    {
+      "file_path": "O1/main.py",
+      "action": "modify",
+      "staged_filename": "O1__main.py",
+      "description": "Integrated ScheduleReminder into OrionO1 lifecycle. Added import, instantiation after calendar/tts/brain init, start() in run(), stop() in finally block. Added schedule summary voice command detection for '일정 요약', '오늘 일정', 'schedule summary', 'daily briefing' keywords. Added SCHEDULE_SUMMARY_KEYWORDS constant and _is_schedule_summary_command() method."
+    }
+  ]
+}

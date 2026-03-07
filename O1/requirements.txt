@@ -1,0 +1,29 @@
+# Orion O1 - EDITH Smart Glasses
+# Install: pip install -r O1/requirements.txt
+
+# === Core AI ===
+anthropic>=0.18.0
+tavily-python>=0.3.0
+google-genai>=0.3.0
+python-dotenv>=1.0.0
+requests>=2.31.0
+
+# === Server ===
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+websockets>=12.0
+
+# === Audio ===
+sounddevice>=0.4.6
+numpy>=1.24.0
+pygame>=2.5.0
+
+# === HUD Rendering ===
+Pillow>=10.0.0
+
+# === Vision (Desktop Test Client) ===
+opencv-python>=4.8.0
+PyQt6>=6.5.0
+
+# === Work Assistant (글로벌 키보드 모니터링) ===
+pynput>=1.7.6
