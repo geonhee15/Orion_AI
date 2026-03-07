@@ -1,0 +1,25 @@
+# Orion V6.1 Windows 11 - Requirements
+# Install: pip install -r requirements_win.txt
+
+# === Core ===
+anthropic>=0.18.0
+tavily-python>=0.3.0
+google-genai>=0.3.0
+python-dotenv>=1.0.0
+requests>=2.31.0
+
+# === GUI & Multimedia ===
+PyQt6>=6.6.0
+pygame>=2.5.0
+opencv-python>=4.9.0
+mediapipe>=0.10.9
+Pillow>=10.2.0
+pyautogui>=0.9.54
+
+# === Windows Only ===
+winotify>=1.1.0
+pywin32>=306
+
+# === Keyboard & Hangul ===
+pynput>=1.7.6
+jamo>=0.4.1
